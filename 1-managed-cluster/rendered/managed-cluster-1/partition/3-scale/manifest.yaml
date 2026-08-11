@@ -116,7 +116,6 @@ metadata:
   name: secret-scale-partition-dr
   namespace: scale-partition-dr
 stringData:
-  dr_management_address: 9.71.253.36
   management_address: 9.71.253.12
   partition_name: Ramen-DR-Partition-Parth
   username: superuser

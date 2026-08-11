@@ -7,9 +7,9 @@ patches:
       - op: replace
         path: /stringData/management_address
         value: 9.71.253.12
-      - op: replace
-        path: /stringData/dr_management_address
-        value: 9.71.253.36
+      # - op: replace
+      #   path: /stringData/dr_management_address
+      #   value: 9.71.253.36
   - target:
       kind: StorageClass
     patch: |-

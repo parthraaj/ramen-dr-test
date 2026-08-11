@@ -53,7 +53,6 @@ metadata:
   name: secret-stress-partition-dr
   namespace: stress-partition-dr
 stringData:
-  dr_management_address: 9.71.253.12
   management_address: 9.71.253.36
   partition_name: Ramen-DR-Partition-Parth
   username: superuser

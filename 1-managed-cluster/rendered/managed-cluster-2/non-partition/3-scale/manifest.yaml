@@ -116,7 +116,6 @@ metadata:
   name: secret-scale-non-partition-dr
   namespace: scale-non-partition-dr
 stringData:
-  dr_management_address: 9.71.253.12
   management_address: 9.71.253.36
   username: superuser
 type: Opaque

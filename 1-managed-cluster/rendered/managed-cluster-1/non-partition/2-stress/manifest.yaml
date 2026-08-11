@@ -53,7 +53,6 @@ metadata:
   name: secret-stress-non-partition-dr
   namespace: stress-non-partition-dr
 stringData:
-  dr_management_address: 9.71.253.36
   management_address: 9.71.253.12
   username: superuser
 type: Opaque
