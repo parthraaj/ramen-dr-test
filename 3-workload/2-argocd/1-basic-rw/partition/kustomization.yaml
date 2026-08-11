@@ -1,0 +1,56 @@
+resources:
+  - ../internal/reader
+  - ../internal/writer
+patches:
+  - target:
+      kind: PersistentVolumeClaim
+      name: pvc-reader
+    patch: |-
+      - op: replace
+        path: /spec/storageClassName
+        value: sc-argocd-basic-rw-partition-dr
+  - target:
+      kind: PersistentVolumeClaim
+      name: pvc-writer
+    patch: |-
+      - op: replace
+        path: /spec/storageClassName
+        value: sc-argocd-basic-rw-partition-dr
+  - target:
+      kind: Deployment
+      name: deploy-reader
+    patch: |-
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: app-key
+                      operator: In
+                      values:
+                        - writer
+                topologyKey: kubernetes.io/hostname
+  - target:
+      kind: Deployment
+      name: deploy-writer
+    patch: |-
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: app-key
+                      operator: In
+                      values:
+                        - reader
+                topologyKey: kubernetes.io/hostname
+namespace: argocd-basic-rw-partition-dr
+labels:
+  - pairs:
+      appname: argocd-basic-rw-partition-dr
+    includeSelectors: false
+    includeTemplates: true

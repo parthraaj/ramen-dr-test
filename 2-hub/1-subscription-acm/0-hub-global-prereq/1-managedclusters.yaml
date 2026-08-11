@@ -1,0 +1,20 @@
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: ramen-ocp1
+  labels:
+    cluster.open-cluster-management.io/clusterset: ramen1
+    name: ramen-ocp1
+spec:
+  hubAcceptsClient: true
+
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: ramen-ocp2
+  labels:
+    cluster.open-cluster-management.io/clusterset: ramen1
+    name: ramen-ocp2
+spec:
+  hubAcceptsClient: true

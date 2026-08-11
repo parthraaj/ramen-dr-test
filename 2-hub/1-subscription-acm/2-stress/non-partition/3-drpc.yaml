@@ -1,0 +1,15 @@
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRPlacementControl
+metadata:
+  name: stress-non-partition-dr-drpc
+  namespace: stress-non-partition-dr
+spec:
+  preferredCluster: ramen-ocp1
+  drPolicyRef:
+    name: ramen-policy-1-2-stress-non-partition
+  placementRef:
+    kind: Placement
+    name: stress-non-partition-dr-app-placement-1
+  pvcSelector:
+    matchLabels:
+      appname: stress-non-partition-dr

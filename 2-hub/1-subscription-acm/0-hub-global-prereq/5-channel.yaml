@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ggithubcom-parthraaj-ramen-dr-test-ns
+
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: ggithubcom-parthraaj-ramen-dr-test
+  namespace: ggithubcom-parthraaj-ramen-dr-test-ns
+spec:
+  type: Git
+  pathname: https://github.com/parthraaj/ramen-dr-test

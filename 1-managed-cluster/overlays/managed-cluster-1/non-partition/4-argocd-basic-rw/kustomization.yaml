@@ -1,0 +1,5 @@
+resources:
+  - ../../../../base/4-argocd-basic-rw
+components:
+  - ../../../../components/cluster-ocp1-non-partition
+  - ../../../../components/mode-non-partition-argocd-basic-rw

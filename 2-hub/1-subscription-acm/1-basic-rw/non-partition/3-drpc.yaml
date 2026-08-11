@@ -1,0 +1,15 @@
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRPlacementControl
+metadata:
+  name: basic-rw-non-partition-dr-drpc
+  namespace: basic-rw-non-partition-dr
+spec:
+  preferredCluster: ramen-ocp1
+  drPolicyRef:
+    name: ramen-policy-1-2-basic-rw-non-partition
+  placementRef:
+    kind: Placement
+    name: basic-rw-non-partition-dr-app-placement-1
+  pvcSelector:
+    matchLabels:
+      appname: basic-rw-non-partition-dr

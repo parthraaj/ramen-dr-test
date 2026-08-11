@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd-basic-rw-non-partition-dr
+---
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  labels:
+    ramendr.openshift.io/replicationid: ibm-block-csi-replication-argocd-basic-rw-non-partition
+    ramendr.openshift.io/storageid: ibm-block-csi-ramen-ocp1-non-partition
+  name: sc-argocd-basic-rw-non-partition-dr
+parameters:
+  csi.storage.k8s.io/controller-publish-secret-name: secret-argocd-basic-rw-non-partition-dr
+  csi.storage.k8s.io/controller-publish-secret-namespace: argocd-basic-rw-non-partition-dr
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-name: secret-argocd-basic-rw-non-partition-dr
+  csi.storage.k8s.io/provisioner-secret-namespace: argocd-basic-rw-non-partition-dr
+  pool: CSI_Parent_Pool
+  virt_snap_func: "true"
+  volume_group: parth-ramen-argocd-basic-rw-non-partition-dr
+  volume_name_prefix: vol-rmn-argocd-basic-rw
+provisioner: block.csi.ibm.com
+reclaimPolicy: Retain
+---
+apiVersion: v1
+data:
+  password: cGFzc3cwcmQ=
+kind: Secret
+metadata:
+  name: secret-argocd-basic-rw-non-partition-dr
+  namespace: argocd-basic-rw-non-partition-dr
+stringData:
+  dr_management_address: 9.71.253.36
+  management_address: 9.71.253.12
+  username: superuser
+type: Opaque
+---
+apiVersion: replication.storage.openshift.io/v1alpha1
+kind: VolumeReplicationClass
+metadata:
+  labels:
+    ramendr.openshift.io/replication-class: ibm-block-csi-replication-argocd-basic-rw-non-partition
+    ramendr.openshift.io/replicationid: ibm-block-csi-replication-argocd-basic-rw-non-partition
+    ramendr.openshift.io/storageid: ibm-block-csi-ramen-ocp1-non-partition
+  name: vrclass-argocd-basic-rw-non-partition-dr
+spec:
+  parameters:
+    replication.storage.openshift.io/replication-secret-name: secret-argocd-basic-rw-non-partition-dr
+    replication.storage.openshift.io/replication-secret-namespace: argocd-basic-rw-non-partition-dr
+    replication_policy: np-2-site-async-dr
+    schedulingInterval: 5m
+  provisioner: block.csi.ibm.com

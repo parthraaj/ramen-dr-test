@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scale-non-partition-dr
+
+---
+apiVersion: cluster.open-cluster-management.io/v1beta2
+kind: ManagedClusterSetBinding
+metadata:
+  name: ramen1
+  namespace: scale-non-partition-dr
+spec:
+  clusterSet: ramen1
+
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: scale-non-partition-dr-app-placement-1
+  namespace: scale-non-partition-dr
+  annotations:
+    cluster.open-cluster-management.io/experimental-scheduling-disable: "true"
+spec:
+  clusterSets:
+    - ramen1
+  numberOfClusters: 1
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchLabels:
+            name: ramen-ocp1

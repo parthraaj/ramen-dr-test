@@ -1,0 +1,12 @@
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRPolicy
+metadata:
+  name: ramen-policy-1-2-stress-non-partition
+spec:
+  drClusters:
+    - ramen-ocp1
+    - ramen-ocp2
+  replicationClassSelector:
+    matchLabels:
+      ramendr.openshift.io/replication-class: ibm-block-csi-replication-stress-non-partition
+  schedulingInterval: 5m

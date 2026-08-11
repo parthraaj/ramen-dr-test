@@ -1,0 +1,20 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-argocd-basic-rw
+  labels:
+    ramendr.openshift.io/storageid: "PLACEHOLDER"
+    ramendr.openshift.io/replicationid: "PLACEHOLDER"
+provisioner: block.csi.ibm.com
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+parameters:
+  pool: CSI_Parent_Pool
+  virt_snap_func: "true"
+  volume_group: parth-ramen-argocd-basic-rw
+  volume_name_prefix: vol-rmn-argocd-basic-rw
+  csi.storage.k8s.io/provisioner-secret-name: secret-argocd-basic-rw
+  csi.storage.k8s.io/provisioner-secret-namespace: argocd-basic-rw
+  csi.storage.k8s.io/controller-publish-secret-name: secret-argocd-basic-rw
+  csi.storage.k8s.io/controller-publish-secret-namespace: argocd-basic-rw
+  csi.storage.k8s.io/fstype: ext4

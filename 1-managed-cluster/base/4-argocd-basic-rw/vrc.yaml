@@ -1,0 +1,15 @@
+apiVersion: replication.storage.openshift.io/v1alpha1
+kind: VolumeReplicationClass
+metadata:
+  name: vrclass-argocd-basic-rw
+  labels:
+    ramendr.openshift.io/replicationid: "PLACEHOLDER"
+    ramendr.openshift.io/replication-class: "PLACEHOLDER"
+    ramendr.openshift.io/storageid: "PLACEHOLDER"
+spec:
+  provisioner: block.csi.ibm.com
+  parameters:
+    replication_policy: np-2-site-async-dr
+    replication.storage.openshift.io/replication-secret-name: secret-argocd-basic-rw
+    replication.storage.openshift.io/replication-secret-namespace: argocd-basic-rw
+    schedulingInterval: 5m
