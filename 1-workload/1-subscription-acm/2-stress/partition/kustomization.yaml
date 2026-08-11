@@ -1,0 +1,46 @@
+resources:
+  - ../internal/vol-1
+  - ../internal/vol-2
+  - ../internal/vol-3
+  - ../internal/vol-4
+components:
+  - ../internal/components/pvc-size-100gi
+  - ../internal/components/reader-role-vol-1
+  - ../internal/components/reader-role-vol-2
+  - ../internal/components/writer-stress-role-vol-3
+  - ../internal/components/writer-stress-role-vol-4
+patches:
+  - target:
+      kind: PersistentVolumeClaim
+      name: pvc-vol-1
+    patch: |-
+      - op: replace
+        path: /spec/storageClassName
+        value: sc-stress-a-partition-dr
+  - target:
+      kind: PersistentVolumeClaim
+      name: pvc-vol-2
+    patch: |-
+      - op: replace
+        path: /spec/storageClassName
+        value: sc-stress-a-partition-dr
+  - target:
+      kind: PersistentVolumeClaim
+      name: pvc-vol-3
+    patch: |-
+      - op: replace
+        path: /spec/storageClassName
+        value: sc-stress-b-partition-dr
+  - target:
+      kind: PersistentVolumeClaim
+      name: pvc-vol-4
+    patch: |-
+      - op: replace
+        path: /spec/storageClassName
+        value: sc-stress-b-partition-dr
+namespace: stress-partition-dr
+labels:
+  - pairs:
+      appname: stress-partition-dr
+    includeSelectors: false
+    includeTemplates: true

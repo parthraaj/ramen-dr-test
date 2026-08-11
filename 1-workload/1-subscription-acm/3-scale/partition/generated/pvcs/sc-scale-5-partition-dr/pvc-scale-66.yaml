@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-scale-66
+  labels:
+    appname: scale-partition-dr
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: sc-scale-5-partition-dr
+  resources:
+    requests:
+      storage: 40Gi
