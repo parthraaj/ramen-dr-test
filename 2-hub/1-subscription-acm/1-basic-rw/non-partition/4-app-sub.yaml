@@ -21,7 +21,7 @@ kind: Subscription
 metadata:
   annotations:
     apps.open-cluster-management.io/git-branch: main
-    apps.open-cluster-management.io/git-path: 1-workload/1-basic-rw/non-partition
+    apps.open-cluster-management.io/git-path: 3-workload/1-basic-rw/non-partition
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
     app: basic-rw-non-partition-dr-app
