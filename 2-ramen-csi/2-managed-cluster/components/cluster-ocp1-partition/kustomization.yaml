@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  - target:
+      kind: Secret
+    patch: |-
+      - op: replace
+        path: /stringData/management_address
+        value: 9.71.253.12
+      - op: replace
+        path: /stringData/dr_management_address
+        value: 9.71.253.36
+  - target:
+      kind: StorageClass
+    patch: |-
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1storageid
+        value: ibm-block-csi-ramen-ocp1-partition
+  - target:
+      kind: VolumeReplicationClass
+    patch: |-
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1storageid
+        value: ibm-block-csi-ramen-ocp1-partition

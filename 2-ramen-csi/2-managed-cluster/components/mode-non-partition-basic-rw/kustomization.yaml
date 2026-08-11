@@ -1,0 +1,64 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  - target:
+      kind: Namespace
+      name: basic-rw
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: basic-rw-non-partition-dr
+  - target:
+      kind: Secret
+      name: secret-basic-rw
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: secret-basic-rw-non-partition-dr
+      - op: replace
+        path: /metadata/namespace
+        value: basic-rw-non-partition-dr
+  - target:
+      kind: StorageClass
+      name: sc-basic-rw
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sc-basic-rw-non-partition-dr
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replicationid
+        value: ibm-block-csi-replication-basic-rw-non-partition
+      - op: replace
+        path: /parameters/volume_group
+        value: parth-ramen-basic-rw-non-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-name
+        value: secret-basic-rw-non-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-namespace
+        value: basic-rw-non-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-name
+        value: secret-basic-rw-non-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-namespace
+        value: basic-rw-non-partition-dr
+  - target:
+      kind: VolumeReplicationClass
+      name: vrclass-basic-rw
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: vrclass-basic-rw-non-partition-dr
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replicationid
+        value: ibm-block-csi-replication-basic-rw-non-partition
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replication-class
+        value: ibm-block-csi-replication-basic-rw-non-partition
+      - op: replace
+        path: /spec/parameters/replication.storage.openshift.io~1replication-secret-name
+        value: secret-basic-rw-non-partition-dr
+      - op: replace
+        path: /spec/parameters/replication.storage.openshift.io~1replication-secret-namespace
+        value: basic-rw-non-partition-dr

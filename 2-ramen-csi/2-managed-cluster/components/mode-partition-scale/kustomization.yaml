@@ -1,0 +1,170 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  - target:
+      kind: Namespace
+      name: scale
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: scale-partition-dr
+  - target:
+      kind: Secret
+      name: secret-scale
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /metadata/namespace
+        value: scale-partition-dr
+      - op: add
+        path: /stringData/partition_name
+        value: Ramen-DR-Partition-Parth
+  - target:
+      kind: StorageClass
+      name: sc-scale-1
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sc-scale-1-partition-dr
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replicationid
+        value: ibm-block-csi-replication-scale-partition
+      - op: replace
+        path: /parameters/volume_group
+        value: parth-ramen-scale-1-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-namespace
+        value: scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-namespace
+        value: scale-partition-dr
+  - target:
+      kind: StorageClass
+      name: sc-scale-2
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sc-scale-2-partition-dr
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replicationid
+        value: ibm-block-csi-replication-scale-partition
+      - op: replace
+        path: /parameters/volume_group
+        value: parth-ramen-scale-2-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-namespace
+        value: scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-namespace
+        value: scale-partition-dr
+  - target:
+      kind: StorageClass
+      name: sc-scale-3
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sc-scale-3-partition-dr
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replicationid
+        value: ibm-block-csi-replication-scale-partition
+      - op: replace
+        path: /parameters/volume_group
+        value: parth-ramen-scale-3-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-namespace
+        value: scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-namespace
+        value: scale-partition-dr
+  - target:
+      kind: StorageClass
+      name: sc-scale-4
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sc-scale-4-partition-dr
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replicationid
+        value: ibm-block-csi-replication-scale-partition
+      - op: replace
+        path: /parameters/volume_group
+        value: parth-ramen-scale-4-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-namespace
+        value: scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-namespace
+        value: scale-partition-dr
+  - target:
+      kind: StorageClass
+      name: sc-scale-5
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sc-scale-5-partition-dr
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replicationid
+        value: ibm-block-csi-replication-scale-partition
+      - op: replace
+        path: /parameters/volume_group
+        value: parth-ramen-scale-5-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1provisioner-secret-namespace
+        value: scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /parameters/csi.storage.k8s.io~1controller-publish-secret-namespace
+        value: scale-partition-dr
+  - target:
+      kind: VolumeReplicationClass
+      name: vrclass-scale
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: vrclass-scale-partition-dr
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replicationid
+        value: ibm-block-csi-replication-scale-partition
+      - op: replace
+        path: /metadata/labels/ramendr.openshift.io~1replication-class
+        value: ibm-block-csi-replication-scale-partition
+      - op: replace
+        path: /spec/parameters/replication_policy
+        value: partition-async-dr
+      - op: replace
+        path: /spec/parameters/replication.storage.openshift.io~1replication-secret-name
+        value: secret-scale-partition-dr
+      - op: replace
+        path: /spec/parameters/replication.storage.openshift.io~1replication-secret-namespace
+        value: scale-partition-dr

@@ -1,0 +1,5 @@
+resources:
+  - ../../../../base/3-scale
+components:
+  - ../../../../components/cluster-ocp2-non-partition
+  - ../../../../components/mode-non-partition-scale

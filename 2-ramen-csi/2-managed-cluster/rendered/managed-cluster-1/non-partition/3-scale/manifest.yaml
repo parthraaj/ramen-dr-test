@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scale-non-partition-dr
+---
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  labels:
+    ramendr.openshift.io/replicationid: ibm-block-csi-replication-scale-non-partition
+    ramendr.openshift.io/storageid: ibm-block-csi-ramen-ocp1-non-partition
+  name: sc-scale-1-non-partition-dr
+parameters:
+  csi.storage.k8s.io/controller-publish-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/controller-publish-secret-namespace: scale-non-partition-dr
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/provisioner-secret-namespace: scale-non-partition-dr
+  pool: CSI_Parent_Pool
+  virt_snap_func: "true"
+  volume_group: parth-ramen-scale-1-non-partition-dr
+  volume_name_prefix: vol-rmn-scale-1
+provisioner: block.csi.ibm.com
+reclaimPolicy: Retain
+---
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  labels:
+    ramendr.openshift.io/replicationid: ibm-block-csi-replication-scale-non-partition
+    ramendr.openshift.io/storageid: ibm-block-csi-ramen-ocp1-non-partition
+  name: sc-scale-2-non-partition-dr
+parameters:
+  csi.storage.k8s.io/controller-publish-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/controller-publish-secret-namespace: scale-non-partition-dr
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/provisioner-secret-namespace: scale-non-partition-dr
+  pool: CSI_Parent_Pool
+  virt_snap_func: "true"
+  volume_group: parth-ramen-scale-2-non-partition-dr
+  volume_name_prefix: vol-rmn-scale-2
+provisioner: block.csi.ibm.com
+reclaimPolicy: Retain
+---
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  labels:
+    ramendr.openshift.io/replicationid: ibm-block-csi-replication-scale-non-partition
+    ramendr.openshift.io/storageid: ibm-block-csi-ramen-ocp1-non-partition
+  name: sc-scale-3-non-partition-dr
+parameters:
+  csi.storage.k8s.io/controller-publish-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/controller-publish-secret-namespace: scale-non-partition-dr
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/provisioner-secret-namespace: scale-non-partition-dr
+  pool: CSI_Parent_Pool
+  virt_snap_func: "true"
+  volume_group: parth-ramen-scale-3-non-partition-dr
+  volume_name_prefix: vol-rmn-scale-3
+provisioner: block.csi.ibm.com
+reclaimPolicy: Retain
+---
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  labels:
+    ramendr.openshift.io/replicationid: ibm-block-csi-replication-scale-non-partition
+    ramendr.openshift.io/storageid: ibm-block-csi-ramen-ocp1-non-partition
+  name: sc-scale-4-non-partition-dr
+parameters:
+  csi.storage.k8s.io/controller-publish-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/controller-publish-secret-namespace: scale-non-partition-dr
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/provisioner-secret-namespace: scale-non-partition-dr
+  pool: CSI_Parent_Pool
+  virt_snap_func: "true"
+  volume_group: parth-ramen-scale-4-non-partition-dr
+  volume_name_prefix: vol-rmn-scale-4
+provisioner: block.csi.ibm.com
+reclaimPolicy: Retain
+---
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  labels:
+    ramendr.openshift.io/replicationid: ibm-block-csi-replication-scale-non-partition
+    ramendr.openshift.io/storageid: ibm-block-csi-ramen-ocp1-non-partition
+  name: sc-scale-5-non-partition-dr
+parameters:
+  csi.storage.k8s.io/controller-publish-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/controller-publish-secret-namespace: scale-non-partition-dr
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-name: secret-scale-non-partition-dr
+  csi.storage.k8s.io/provisioner-secret-namespace: scale-non-partition-dr
+  pool: CSI_Parent_Pool
+  virt_snap_func: "true"
+  volume_group: parth-ramen-scale-5-non-partition-dr
+  volume_name_prefix: vol-rmn-scale-5
+provisioner: block.csi.ibm.com
+reclaimPolicy: Retain
+---
+apiVersion: v1
+data:
+  password: cGFzc3cwcmQ=
+kind: Secret
+metadata:
+  name: secret-scale-non-partition-dr
+  namespace: scale-non-partition-dr
+stringData:
+  dr_management_address: 9.71.253.36
+  management_address: 9.71.253.12
+  username: superuser
+type: Opaque
+---
+apiVersion: replication.storage.openshift.io/v1alpha1
+kind: VolumeReplicationClass
+metadata:
+  labels:
+    ramendr.openshift.io/replication-class: ibm-block-csi-replication-scale-non-partition
+    ramendr.openshift.io/replicationid: ibm-block-csi-replication-scale-non-partition
+    ramendr.openshift.io/storageid: ibm-block-csi-ramen-ocp1-non-partition
+  name: vrclass-scale-non-partition-dr
+spec:
+  parameters:
+    replication.storage.openshift.io/replication-secret-name: secret-scale-non-partition-dr
+    replication.storage.openshift.io/replication-secret-namespace: scale-non-partition-dr
+    replication_policy: np-2-site-async-dr
+    schedulingInterval: 5m
+  provisioner: block.csi.ibm.com

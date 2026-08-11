@@ -1,0 +1,9 @@
+resources:
+  - namespace.yaml
+  - secret.yaml
+  - storageclass-1.yaml
+  - storageclass-2.yaml
+  - storageclass-3.yaml
+  - storageclass-4.yaml
+  - storageclass-5.yaml
+  - vrc.yaml

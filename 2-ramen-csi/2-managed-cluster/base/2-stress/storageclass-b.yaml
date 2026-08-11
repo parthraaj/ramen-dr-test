@@ -1,0 +1,20 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-stress-b
+  labels:
+    ramendr.openshift.io/storageid: "PLACEHOLDER"
+    ramendr.openshift.io/replicationid: "PLACEHOLDER"
+provisioner: block.csi.ibm.com
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+parameters:
+  pool: CSI_Parent_Pool
+  virt_snap_func: "true"
+  volume_group: parth-ramen-stress-b
+  volume_name_prefix: vol-rmn-stress-b
+  csi.storage.k8s.io/provisioner-secret-name: secret-stress
+  csi.storage.k8s.io/provisioner-secret-namespace: stress
+  csi.storage.k8s.io/controller-publish-secret-name: secret-stress
+  csi.storage.k8s.io/controller-publish-secret-namespace: stress
+  csi.storage.k8s.io/fstype: ext4
