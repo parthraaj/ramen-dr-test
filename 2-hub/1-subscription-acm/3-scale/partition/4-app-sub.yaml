@@ -21,7 +21,7 @@ kind: Subscription
 metadata:
   annotations:
     apps.open-cluster-management.io/git-branch: main
-    apps.open-cluster-management.io/git-path: 3-workload/3-scale/partition
+    apps.open-cluster-management.io/git-path: 3-workload/1-subscription-acm/3-scale/partition
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
     app: scale-partition-dr-app
