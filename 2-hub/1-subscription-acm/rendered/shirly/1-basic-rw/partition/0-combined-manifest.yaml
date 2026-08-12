@@ -29,7 +29,7 @@ metadata:
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
     app: basic-rw-partition-dr-shirly-app
-  name: basic-rw-partition-dr-shirly-sub-1
+  name: basic-rw-partition-dr-shirly-sub
   namespace: basic-rw-partition-dr
 spec:
   channel: ggithubcom-parthraaj-ramen-dr-test-ns/ggithubcom-parthraaj-ramen-dr-test

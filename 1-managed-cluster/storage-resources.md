@@ -22,7 +22,7 @@
 
 ----
 
-### Generate updated manifests
+### Generate updated manifests in rendered dir
 ```go
 for f in overlays/*/*/*; do
   outdir="rendered/${f#overlays/}"

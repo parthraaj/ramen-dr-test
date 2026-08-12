@@ -25,7 +25,7 @@ metadata:
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
     app: stress-non-partition-dr-shirly-app
-  name: stress-non-partition-dr-shirly-sub-1
+  name: stress-non-partition-dr-shirly-sub
   namespace: stress-non-partition-dr
 spec:
   channel: ggithubcom-parthraaj-ramen-dr-test-ns/ggithubcom-parthraaj-ramen-dr-test

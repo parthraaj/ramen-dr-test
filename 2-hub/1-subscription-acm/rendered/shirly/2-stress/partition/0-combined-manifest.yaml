@@ -29,7 +29,7 @@ metadata:
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
     app: stress-partition-dr-shirly-app
-  name: stress-partition-dr-shirly-sub-1
+  name: stress-partition-dr-shirly-sub
   namespace: stress-partition-dr
 spec:
   channel: ggithubcom-parthraaj-ramen-dr-test-ns/ggithubcom-parthraaj-ramen-dr-test

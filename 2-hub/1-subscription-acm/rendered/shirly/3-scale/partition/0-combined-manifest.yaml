@@ -29,7 +29,7 @@ metadata:
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
     app: scale-partition-dr-shirly-app
-  name: scale-partition-dr-shirly-sub-1
+  name: scale-partition-dr-shirly-sub
   namespace: scale-partition-dr
 spec:
   channel: ggithubcom-parthraaj-ramen-dr-test-ns/ggithubcom-parthraaj-ramen-dr-test

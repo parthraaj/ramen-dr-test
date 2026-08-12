@@ -93,7 +93,7 @@ patches:
         value: scale-non-partition-dr-shirly-app
       - op: replace
         path: /metadata/name
-        value: scale-non-partition-dr-shirly-sub-1
+        value: scale-non-partition-dr-shirly-sub
       - op: replace
         path: /metadata/namespace
         value: scale-non-partition-dr

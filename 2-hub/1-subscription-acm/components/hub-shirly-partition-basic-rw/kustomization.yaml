@@ -93,7 +93,7 @@ patches:
         value: basic-rw-partition-dr-shirly-app
       - op: replace
         path: /metadata/name
-        value: basic-rw-partition-dr-shirly-sub-1
+        value: basic-rw-partition-dr-shirly-sub
       - op: replace
         path: /metadata/namespace
         value: basic-rw-partition-dr

@@ -1,6 +1,8 @@
 
-## Command to generate kustomize to manifests in render dir
+## Command to generate kustomize to manifests in rendered dir
 ```go
+rm -rf rendered
+
 for f in overlays/*/*/*; do
   outdir="rendered/${f#overlays/}"
   mkdir -p "$outdir"
