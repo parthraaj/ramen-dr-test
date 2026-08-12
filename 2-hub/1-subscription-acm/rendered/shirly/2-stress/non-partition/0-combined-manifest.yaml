@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: stress-non-partition-dr
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: stress-non-partition-dr-shirly-app
+  namespace: stress-non-partition-dr
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - stress-non-partition-dr-shirly-app
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  annotations:
+    apps.open-cluster-management.io/git-branch: main
+    apps.open-cluster-management.io/git-path: 3-workload/1-subscription-acm/2-stress/non-partition
+    apps.open-cluster-management.io/reconcile-option: merge
+  labels:
+    app: stress-non-partition-dr-shirly-app
+  name: stress-non-partition-dr-shirly-sub-1
+  namespace: stress-non-partition-dr
+spec:
+  channel: ggithubcom-parthraaj-ramen-dr-test-ns/ggithubcom-parthraaj-ramen-dr-test
+  placement:
+    placementRef:
+      kind: Placement
+      name: stress-non-partition-dr-shirly-app-placement-1
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  annotations:
+    cluster.open-cluster-management.io/experimental-scheduling-disable: "true"
+  name: stress-non-partition-dr-shirly-app-placement-1
+  namespace: stress-non-partition-dr
+spec:
+  clusterSets:
+  - ramen-shirly
+  numberOfClusters: 1
+  predicates:
+  - requiredClusterSelector:
+      labelSelector:
+        matchLabels:
+          name: shirly-ramen-ocp-dr1
+---
+apiVersion: cluster.open-cluster-management.io/v1beta2
+kind: ManagedClusterSetBinding
+metadata:
+  name: ramen-shirly
+  namespace: stress-non-partition-dr
+spec:
+  clusterSet: ramen-shirly
+---
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRPlacementControl
+metadata:
+  name: stress-non-partition-dr-shirly-drpc
+  namespace: stress-non-partition-dr
+spec:
+  drPolicyRef:
+    name: ramen-policy-shirly-stress-non-partition
+  placementRef:
+    kind: Placement
+    name: stress-non-partition-dr-shirly-app-placement-1
+  preferredCluster: shirly-ramen-ocp-dr1
+  pvcSelector:
+    matchLabels:
+      appname: stress-non-partition-dr
+---
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRPolicy
+metadata:
+  name: ramen-policy-shirly-stress-non-partition
+spec:
+  drClusters:
+  - shirly-ramen-ocp-dr1
+  - shirly-ramen-ocp-dr2
+  replicationClassSelector:
+    matchLabels:
+      ramendr.openshift.io/replication-class: ibm-block-csi-replication-stress-non-partition
+  schedulingInterval: 5m

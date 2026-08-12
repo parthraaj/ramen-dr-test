@@ -1,0 +1,20 @@
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: shirly-ramen-ocp-dr1
+  labels:
+    cluster.open-cluster-management.io/clusterset: ramen-shirly
+    name: shirly-ramen-ocp-dr1
+spec:
+  hubAcceptsClient: true
+
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: shirly-ramen-ocp-dr2
+  labels:
+    cluster.open-cluster-management.io/clusterset: ramen-shirly
+    name: shirly-ramen-ocp-dr2
+spec:
+  hubAcceptsClient: true

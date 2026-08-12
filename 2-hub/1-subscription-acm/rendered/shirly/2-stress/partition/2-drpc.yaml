@@ -1,0 +1,16 @@
+---
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRPlacementControl
+metadata:
+  name: stress-partition-dr-shirly-drpc
+  namespace: stress-partition-dr
+spec:
+  drPolicyRef:
+    name: ramen-policy-shirly-stress-partition
+  placementRef:
+    kind: Placement
+    name: stress-partition-dr-shirly-app-placement-1
+  preferredCluster: shirly-ramen-ocp-dr1
+  pvcSelector:
+    matchLabels:
+      appname: stress-partition-dr

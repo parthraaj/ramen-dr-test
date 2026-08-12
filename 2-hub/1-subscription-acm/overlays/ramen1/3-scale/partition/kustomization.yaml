@@ -1,0 +1,4 @@
+resources:
+  - ../../../../base/3-scale
+components:
+  - ../../../../components/hub-ramen1-partition-scale

@@ -1,0 +1,5 @@
+resources:
+  - 1-pre-req.yaml
+  - 2-drpolicy.yaml
+  - 3-drpc.yaml
+  - 4-app-sub.yaml

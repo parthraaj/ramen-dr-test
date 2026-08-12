@@ -1,0 +1,4 @@
+resources:
+  - ../../../../base/2-stress
+components:
+  - ../../../../components/hub-shirly-partition-stress

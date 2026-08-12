@@ -1,0 +1,244 @@
+# =============================================================================
+# HUB CLUSTER RESOURCES
+# =============================================================================
+
+# -----------------------------------------------------------------------
+# ramen1 pair
+# -----------------------------------------------------------------------
+
+# 1. ManagedCluster, one per managed cluster.
+# Registers the cluster with the hub via ACM import. Referenced indirectly
+# by every ramen1 scenario's Placement, through the clusterset label below.
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: ramen-ocp1
+  labels:
+    cluster.open-cluster-management.io/clusterset: ramen1
+    name: ramen-ocp1
+spec:
+  hubAcceptsClient: true
+
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: ramen-ocp2
+  labels:
+    cluster.open-cluster-management.io/clusterset: ramen1
+    name: ramen-ocp2
+spec:
+  hubAcceptsClient: true
+---
+
+# 2. ManagedClusterSet, cluster scoped.
+# Groups the two ramen1 ManagedClusters above using their clusterset label.
+# Referenced by every ramen1 scenario's Placement.spec.clusterSets and
+# ManagedClusterSetBinding.spec.clusterSet.
+apiVersion: cluster.open-cluster-management.io/v1beta2
+kind: ManagedClusterSet
+metadata:
+  name: ramen1
+spec:
+  clusterSelector:
+    selectorType: ExclusiveClusterSetLabel
+---
+
+# 3. DRCluster, one per managed cluster, cluster scoped.
+# Ramen's own cluster registration for the ramen1 pair. Points at the S3
+# profile each cluster uses for VRG and PV metadata backup. Referenced by
+# every ramen1 scenario's DRPolicy.spec.drClusters.
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRCluster
+metadata:
+  name: ramen-ocp1
+  labels:
+    cluster.open-cluster-management.io/backup: ramen
+spec:
+  s3ProfileName: minio-s3-ramen-ocp1
+
+---
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRCluster
+metadata:
+  name: ramen-ocp2
+  labels:
+    cluster.open-cluster-management.io/backup: ramen
+spec:
+  s3ProfileName: minio-s3-ramen-ocp2
+---
+
+# -----------------------------------------------------------------------
+# shirly pair
+# -----------------------------------------------------------------------
+
+# 1. ManagedCluster, one per managed cluster.
+# Already imported into ACM before this project began. Listed here for
+# documentation and repo consistency, not first-time creation.
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: shirly-ramen-ocp-dr1
+  labels:
+    cluster.open-cluster-management.io/clusterset: ramen-shirly
+    name: shirly-ramen-ocp-dr1
+spec:
+  hubAcceptsClient: true
+
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: shirly-ramen-ocp-dr2
+  labels:
+    cluster.open-cluster-management.io/clusterset: ramen-shirly
+    name: shirly-ramen-ocp-dr2
+spec:
+  hubAcceptsClient: true
+---
+
+# 2. ManagedClusterSet, cluster scoped.
+# Groups the two shirly ManagedClusters above using their clusterset label.
+# Referenced by every shirly scenario's Placement.spec.clusterSets and
+# ManagedClusterSetBinding.spec.clusterSet.
+apiVersion: cluster.open-cluster-management.io/v1beta2
+kind: ManagedClusterSet
+metadata:
+  name: ramen-shirly
+spec:
+  clusterSelector:
+    selectorType: ExclusiveClusterSetLabel
+---
+
+# 3. DRCluster, one per managed cluster, cluster scoped.
+# Already existed with the correct S3 profile before this project began.
+# Listed here for documentation and repo consistency.
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRCluster
+metadata:
+  name: shirly-ramen-ocp-dr1
+  labels:
+    cluster.open-cluster-management.io/backup: ramen
+spec:
+  s3ProfileName: minio-s3-shirly-ramen-ocp-dr1
+
+---
+apiVersion: ramendr.openshift.io/v1alpha1
+kind: DRCluster
+metadata:
+  name: shirly-ramen-ocp-dr2
+  labels:
+    cluster.open-cluster-management.io/backup: ramen
+spec:
+  s3ProfileName: minio-s3-shirly-ramen-ocp-dr2
+---
+
+# -----------------------------------------------------------------------
+# common, shared across both pairs
+# -----------------------------------------------------------------------
+
+# 1. RamenConfig, delivered as a ConfigMap read by the Ramen Hub Operator.
+# Cluster wide settings. Defines the S3 profile list that every DRCluster
+# above, ramen1 and shirly alike, references by name.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ramen-hub-operator-config
+  namespace: openshift-operators
+  labels:
+    app: ramen-hub
+    cluster.open-cluster-management.io/backup: ramen
+data:
+  ramen_manager_config.yaml: |
+    apiVersion: ramendr.openshift.io/v1alpha1
+    kind: RamenConfig
+    ramenControllerType: dr-hub
+    ramenOpsNamespace: openshift-dr-ops
+    maxConcurrentReconciles: 50
+    retainNamespaceSCCAcrossPeers: true
+    volumeUnprotectionEnabled: true
+    drClusterOperator:
+      catalogSourceName: odf-konflux-4-23
+      catalogSourceNamespaceName: openshift-marketplace
+      channelName: stable-4.23
+      clusterServiceVersionName: odr-cluster-operator.v4.23.0-36.stable
+      deploymentAutomationEnabled: true
+      namespaceName: openshift-dr-system
+      packageName: odr-cluster-operator
+      s3SecretDistributionEnabled: true
+    health:
+      healthProbeBindAddress: :8081
+    leaderElection:
+      leaderElect: true
+      leaseDuration: 0s
+      renewDeadline: 0s
+      resourceLock: ""
+      resourceName: hub.ramendr.openshift.io
+      resourceNamespace: ""
+      retryPeriod: 0s
+    metrics:
+      bindAddress: 127.0.0.1:9289
+    multiNamespace:
+      FeatureEnabled: true
+      volsyncSupported: true
+    kubeObjectProtection:
+      veleroNamespaceName: openshift-adp
+    volSync:
+      destinationCopyMethod: Direct
+    s3StoreProfiles:
+      - s3ProfileName: minio-s3-ramen-ocp1
+        s3Bucket: ramen-ocp1-bucket
+        s3CompatibleEndpoint: http://minio-http-minio-storage.apps.shirly-ramen-ocp-hub-1.xiv.ibm.com
+        s3Region: us-east-1
+        s3SecretRef:
+          name: ramen-s3-secret
+          namespace: openshift-operators
+      - s3ProfileName: minio-s3-ramen-ocp2
+        s3Bucket: ramen-ocp2-bucket
+        s3CompatibleEndpoint: http://minio-http-minio-storage.apps.shirly-ramen-ocp-hub-1.xiv.ibm.com
+        s3Region: us-east-1
+        s3SecretRef:
+          name: ramen-s3-secret
+          namespace: openshift-operators
+      - s3ProfileName: minio-s3-ramen-ocp3
+        s3Bucket: ramen-ocp3-bucket
+        s3CompatibleEndpoint: http://minio-http-minio-storage.apps.shirly-ramen-ocp-hub-1.xiv.ibm.com
+        s3Region: us-east-1
+        s3SecretRef:
+          name: ramen-s3-secret
+          namespace: openshift-operators
+      - s3ProfileName: minio-s3-shirly-ramen-ocp-dr1
+        s3Bucket: shirly-ramen-ocp-dr1-bucket
+        s3CompatibleEndpoint: http://minio-http-minio-storage.apps.shirly-ramen-ocp-hub-1.xiv.ibm.com
+        s3Region: us-east-1
+        s3SecretRef:
+          name: ramen-s3-secret
+          namespace: openshift-operators
+      - s3ProfileName: minio-s3-shirly-ramen-ocp-dr2
+        s3Bucket: shirly-ramen-ocp-dr2-bucket
+        s3CompatibleEndpoint: http://minio-http-minio-storage.apps.shirly-ramen-ocp-hub-1.xiv.ibm.com
+        s3Region: us-east-1
+        s3SecretRef:
+          name: ramen-s3-secret
+          namespace: openshift-operators
+
+---
+
+# 2. Channel, Git source referenced by every scenario's Subscription.
+# One shared channel for the entire ramen-dr-test repository, used by
+# spec.channel on every Subscription across all scenarios, modes, and
+# both cluster pairs.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ggithubcom-parthraaj-ramen-dr-test-ns
+
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: ggithubcom-parthraaj-ramen-dr-test
+  namespace: ggithubcom-parthraaj-ramen-dr-test-ns
+spec:
+  type: Git
+  pathname: https://github.com/parthraaj/ramen-dr-test

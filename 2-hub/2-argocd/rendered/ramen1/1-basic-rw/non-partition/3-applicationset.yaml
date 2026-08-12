@@ -1,0 +1,33 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd-basic-rw-non-partition-appset
+  namespace: openshift-gitops
+spec:
+  generators:
+  - clusterDecisionResource:
+      configMapRef: argocd-basic-rw-non-partition-appset
+      labelSelector:
+        matchLabels:
+          cluster.open-cluster-management.io/placement: argocd-basic-rw-non-partition-appset
+      requeueAfterSeconds: 30
+  template:
+    metadata:
+      name: argocd-basic-rw-non-partition-{{name}}
+    spec:
+      destination:
+        namespace: argocd-basic-rw-non-partition-dr
+        server: '{{server}}'
+      project: default
+      source:
+        path: 3-workload/2-argocd/1-basic-rw/non-partition
+        repoURL: https://github.com/parthraaj/ramen-dr-test
+        targetRevision: main
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+        - PruneLast=true
