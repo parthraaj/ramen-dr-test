@@ -10,6 +10,7 @@ spec:
   placementRef:
     kind: Placement
     name: PLACEHOLDER-APPSET-NAME
+    namespace: openshift-gitops
   pvcSelector:
     matchLabels:
       appname: PLACEHOLDER-NS
