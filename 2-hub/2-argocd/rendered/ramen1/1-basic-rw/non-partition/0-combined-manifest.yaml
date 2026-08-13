@@ -131,6 +131,7 @@ spec:
   placementRef:
     kind: Placement
     name: argocd-basic-rw-non-partition-appset
+    namespace: openshift-gitops
   preferredCluster: ramen-ocp1
   pvcSelector:
     matchLabels:

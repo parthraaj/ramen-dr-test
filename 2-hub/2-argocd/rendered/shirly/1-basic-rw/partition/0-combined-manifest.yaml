@@ -131,6 +131,7 @@ spec:
   placementRef:
     kind: Placement
     name: argocd-basic-rw-partition-shirly-appset
+    namespace: openshift-gitops
   preferredCluster: shirly-ramen-ocp-dr1
   pvcSelector:
     matchLabels:
