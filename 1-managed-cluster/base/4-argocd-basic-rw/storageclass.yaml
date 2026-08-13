@@ -12,7 +12,7 @@ parameters:
   pool: CSI_Parent_Pool
   virt_snap_func: "true"
   volume_group: parth-ramen-argocd-basic-rw
-  volume_name_prefix: vol-rmn-argocd-basic-rw
+  volume_name_prefix: vol-argocd-basic-rw
   csi.storage.k8s.io/provisioner-secret-name: secret-argocd-basic-rw
   csi.storage.k8s.io/provisioner-secret-namespace: argocd-basic-rw
   csi.storage.k8s.io/controller-publish-secret-name: secret-argocd-basic-rw
