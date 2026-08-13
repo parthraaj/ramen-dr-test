@@ -1,4 +1,4 @@
-## Issue:
+## Issue: VRG Stuck Deleting: ramen-s3-secret Namespace Mismatch
 VRG `basic-rw-non-partition-dr-shirly-drpc` on `shirly-ramen-ocp-dr1` was stuck deleting because its finalizer needed to use `ramen-s3-secret` to access S3 and clean up cluster data before it could remove itself, but the secret was found in `openshift-dr-system` instead of `openshift-operators`. The hub installs its own operator and resources in `openshift-operators`, but when it pushes resources to managed clusters via ManifestWork, they land in `openshift-dr-system`, since that's where the dr-cluster-operator runs on managed clusters. Because the hub and managed cluster use different namespaces, the secret ended up in a namespace the VRG controller wasn't looking in.
 
 ## Fix:
