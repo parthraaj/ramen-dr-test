@@ -71,9 +71,6 @@ patches:
         path: /metadata/name
         value: argocd-basic-rw-non-partition-dr-drpc
       - op: replace
-        path: /metadata/namespace
-        value: argocd-basic-rw-non-partition-dr
-      - op: replace
         path: /spec/preferredCluster
         value: ramen-ocp1
       - op: replace

@@ -2,7 +2,7 @@ apiVersion: ramendr.openshift.io/v1alpha1
 kind: DRPlacementControl
 metadata:
   name: PLACEHOLDER-DRPC-NAME
-  namespace: PLACEHOLDER-NS
+  namespace: openshift-gitops
 spec:
   preferredCluster: PLACEHOLDER-PREFERRED-CLUSTER
   drPolicyRef:

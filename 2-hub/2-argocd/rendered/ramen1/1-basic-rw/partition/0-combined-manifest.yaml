@@ -124,7 +124,7 @@ apiVersion: ramendr.openshift.io/v1alpha1
 kind: DRPlacementControl
 metadata:
   name: argocd-basic-rw-partition-dr-drpc
-  namespace: argocd-basic-rw-partition-dr
+  namespace: openshift-gitops
 spec:
   drPolicyRef:
     name: ramen-policy-1-2-argocd-basic-rw-partition

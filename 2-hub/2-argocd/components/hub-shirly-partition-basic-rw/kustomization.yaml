@@ -71,9 +71,6 @@ patches:
         path: /metadata/name
         value: argocd-basic-rw-partition-dr-shirly-drpc
       - op: replace
-        path: /metadata/namespace
-        value: argocd-basic-rw-partition-dr
-      - op: replace
         path: /spec/preferredCluster
         value: shirly-ramen-ocp-dr1
       - op: replace
