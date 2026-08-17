@@ -1,5 +1,0 @@
-resources:
-  - namespace.yaml
-  - secret.yaml
-  - storageclass.yaml
-  - vrc.yaml

@@ -1,5 +1,0 @@
-resources:
-  - ../../../../base/2-stress
-components:
-  - ../../../../components/cluster-ocp2-partition
-  - ../../../../components/mode-partition-stress

@@ -1,5 +1,0 @@
-resources:
-  - ../../../../base/1-basic-rw
-components:
-  - ../../../../components/cluster-ocp2-non-partition
-  - ../../../../components/mode-non-partition-basic-rw

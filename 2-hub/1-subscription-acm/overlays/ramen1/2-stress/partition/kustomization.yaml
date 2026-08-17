@@ -1,4 +1,0 @@
-resources:
-  - ../../../../base/2-stress
-components:
-  - ../../../../components/hub-ramen1-partition-stress
