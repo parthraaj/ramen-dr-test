@@ -1,1 +1,4 @@
-4-extras/0-sync-repo-to-remote.sh
+/1-managed-cluster/
+/2-hub/
+/4-extras/
+/README.md
