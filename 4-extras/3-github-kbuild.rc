@@ -1,0 +1,68 @@
+# ============================================================
+# Unified repo helpers: kbuild / kapply / kdelete
+# Flag selects target: -m managed-cluster, -h hub subscription-acm,
+# -a hub argocd, -r raw single file
+# Reads from the public GitHub repo over the network.
+# ============================================================
+
+_krepo_resolve() {
+  local mode="$1" path="$2"
+  case "$mode" in
+    -m) _KR_BASE="1-managed-cluster" ;;
+    -h) _KR_BASE="2-hub/1-subscription-acm" ;;
+    -a) _KR_BASE="2-hub/2-argocd" ;;
+    -r) _KR_BASE="" ;;
+    *)
+      echo "Error: first arg must be -m (managed-cluster), -h (hub subscription-acm), -a (hub argocd), or -r (raw file)" >&2
+      return 1
+      ;;
+  esac
+
+  if [[ -z "$path" ]]; then
+    echo "Error: missing path argument" >&2
+    return 1
+  fi
+
+  _KR_REF="main"
+  if [[ "$path" == *"?ref="* ]]; then
+    _KR_REF="${path#*?ref=}"
+    path="${path%%\?ref=*}"
+  fi
+  _KR_PATH="$path"
+}
+
+kbuild() {
+  local mode="$1" path="$2"
+  _krepo_resolve "$mode" "$path" || { echo "Usage: kbuild -m|-h|-a|-r <path>[?ref=<branch>]" >&2; return 1; }
+
+  local repo="https://github.com/parthraaj/ramen-dr-test"
+  if [[ "$mode" == "-r" ]]; then
+    curl -s "https://raw.githubusercontent.com/parthraaj/ramen-dr-test/${_KR_REF}/${_KR_PATH}"
+  else
+    kustomize build "${repo}//${_KR_BASE}/${_KR_PATH}?ref=${_KR_REF}"
+  fi
+}
+
+kapply() {
+  local mode="$1" path="$2"; shift 2
+  _krepo_resolve "$mode" "$path" || { echo "Usage: kapply -m|-h|-a|-r <path>[?ref=<branch>] [extra oc apply flags]" >&2; return 1; }
+
+  local repo="https://github.com/parthraaj/ramen-dr-test"
+  if [[ "$mode" == "-r" ]]; then
+    oc apply -f "https://raw.githubusercontent.com/parthraaj/ramen-dr-test/${_KR_REF}/${_KR_PATH}" "$@"
+  else
+    oc apply -k "${repo}//${_KR_BASE}/${_KR_PATH}?ref=${_KR_REF}" "$@"
+  fi
+}
+
+kdelete() {
+  local mode="$1" path="$2"; shift 2
+  _krepo_resolve "$mode" "$path" || { echo "Usage: kdelete -m|-h|-a|-r <path>[?ref=<branch>] [extra oc delete flags]" >&2; return 1; }
+
+  local repo="https://github.com/parthraaj/ramen-dr-test"
+  if [[ "$mode" == "-r" ]]; then
+    oc delete -f "https://raw.githubusercontent.com/parthraaj/ramen-dr-test/${_KR_REF}/${_KR_PATH}" "$@"
+  else
+    oc delete -k "${repo}//${_KR_BASE}/${_KR_PATH}?ref=${_KR_REF}" "$@"
+  fi
+}

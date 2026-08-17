@@ -20,7 +20,7 @@ kbuild -h overlays/shirly/3-scale/partition
 # 4-argocd-basic-rw (argocd hub)
 kbuild -m overlays/managed-cluster-1/partition/4-argocd-basic-rw
 kbuild -m overlays/managed-cluster-2/partition/4-argocd-basic-rw
-kbuild -h overlays/shirly/1-basic-rw/partition
+kbuild -a overlays/shirly/1-basic-rw/partition
 ```
 
 ### Non-Partition
@@ -43,10 +43,16 @@ kbuild -h overlays/shirly/3-scale/non-partition
 # 4-argocd-basic-rw (argocd hub)
 kbuild -m overlays/managed-cluster-1/non-partition/4-argocd-basic-rw
 kbuild -m overlays/managed-cluster-2/non-partition/4-argocd-basic-rw
-kbuild -h overlays/shirly/1-basic-rw/non-partition
+kbuild -a overlays/shirly/1-basic-rw/non-partition
 ```
 
 ### NOTE:
+`kbuild`, `kapply`, and `kdelete` take a mode flag as the first argument:
+- `-m` targets `1-managed-cluster` (storage specs: Secret, StorageClass, VolumeReplicationClass)
+- `-h` targets `2-hub/1-subscription-acm` (Namespace, Placement, DRPolicy, DRPC, Application, Subscription)
+- `-a` targets `2-hub/2-argocd` (Namespace, GitOps prereqs, DRPolicy, DRPC, ApplicationSet)
+- `-r` treats the path as a single raw YAML file relative to repo root, applied without kustomize
+
 We can also use kapply -r <path> to apply a single raw YAML file directly, without going through kustomize at all. This is useful for one off files like 0-hub-global-prereq/0-reference-combined.yaml, individual split files under rendered/, or any standalone manifest that doesn't need a kustomization.yaml.
 ```go
 kapply -r 2-hub/1-subscription-acm/0-hub-global-prereq/0-reference-combined.yaml
