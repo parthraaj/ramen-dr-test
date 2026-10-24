@@ -1,0 +1,58 @@
+# One pod with 3 PVCs. Each volume has its own write loop, so every volume
+# has I/O in flight and the pod stays stuck until queueing is released on all of them.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-multi-writer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-key: multi-writer
+  template:
+    metadata:
+      labels:
+        app-key: multi-writer
+    spec:
+      nodeSelector:
+        role: dr-workload-writer
+      containers:
+        - name: multi-logger
+          image: quay.io/nirsof/busybox:stable
+          command:
+            - sh
+            - -c
+            - |
+              emit() {
+                  echo "$(date) $2" | tee -a "$1/ramen.log"
+                  sync
+              }
+              writer() {
+                  emit "$1" START
+                  while true; do
+                      sleep 10
+                      emit "$1" UPDATE
+                  done
+              }
+              trap 'for d in /data1 /data2 /data3; do emit "$d" STOP; done; exit' TERM
+              for d in /data1 /data2 /data3; do
+                  writer "$d" &
+              done
+              wait
+          volumeMounts:
+            - name: data1
+              mountPath: /data1
+            - name: data2
+              mountPath: /data2
+            - name: data3
+              mountPath: /data3
+      volumes:
+        - name: data1
+          persistentVolumeClaim:
+            claimName: pvc-multi-writer-1
+        - name: data2
+          persistentVolumeClaim:
+            claimName: pvc-multi-writer-2
+        - name: data3
+          persistentVolumeClaim:
+            claimName: pvc-multi-writer-3
