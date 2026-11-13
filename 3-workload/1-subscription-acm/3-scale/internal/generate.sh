@@ -7,10 +7,10 @@ if [ "$MODE" != "partition" ] && [ "$MODE" != "non-partition" ]; then
   exit 1
 fi
 
-TOTAL=75
+TOTAL=50
 NUM_SC=5
 PER_SC=$((TOTAL / NUM_SC))
-SIZE=40Gi
+SIZE=20Gi
 NAMESPACE="scale-${MODE}-dr"
 APPNAME="scale-${MODE}-dr"
 WRITER_SC_COUNT=2

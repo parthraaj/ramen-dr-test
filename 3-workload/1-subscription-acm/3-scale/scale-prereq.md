@@ -6,4 +6,4 @@ chmod +x generate.sh
 ./generate.sh non-partition
 ```
 
-#### NOTE: Size of CSI_Parent_Pool should be minimum 3 TB on both Primary & Secondary Storages
+#### NOTE: 50 PVCs x 20Gi = 1000Gi provisioned per site. Size of CSI_Parent_Pool should be minimum 1.5 TB on both Primary & Secondary Storages (leaves headroom for replication snapshots)

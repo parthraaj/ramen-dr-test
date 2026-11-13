@@ -10,4 +10,4 @@ spec:
   storageClassName: sc-scale-1-non-partition-dr
   resources:
     requests:
-      storage: 40Gi
+      storage: 20Gi
