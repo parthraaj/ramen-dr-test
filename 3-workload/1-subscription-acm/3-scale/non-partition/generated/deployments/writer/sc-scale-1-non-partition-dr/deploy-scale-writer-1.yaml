@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-scale-writer-1
+  labels:
+    appname: scale-non-partition-dr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-key: deploy-scale-writer-1
+  template:
+    metadata:
+      labels:
+        app-key: deploy-scale-writer-1
+        appname: scale-non-partition-dr
+        scale-test: spread
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              scale-test: spread
+      containers:
+        - name: logger
+          image: quay.io/nirsof/busybox:stable
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              # One write loop per volume. Each loop writes 1024 MB chunks (5% of 20Gi),
+              # and when the volume reaches 90% it deletes oldest chunks down to 50%.
+              usage() { df "$1" | awk 'NR==2 {gsub("%","",$5); print $5}'; }
+              emit() {
+                  echo "$(date) $2" | tee -a "$1/ramen.log"
+                  sync
+              }
+              writer() {
+                  d=$1
+                  emit "$d" START
+                  i=0
+                  while true; do
+                      u=$(usage "$d")
+                      if [ "$u" -ge 90 ]; then
+                          emit "$d" "usage ${u}%, cleaning up to 50%"
+                          while [ "$u" -ge 50 ]; do
+                              oldest=$(ls -tr "$d"/chunk_*.bin 2>/dev/null | head -1)
+                              [ -z "$oldest" ] && break
+                              rm -f "$oldest"
+                              u=$(usage "$d")
+                          done
+                          emit "$d" "usage now ${u}%"
+                      fi
+                      dd if=/dev/zero of="$d/chunk_$i.bin" bs=1M count=1024 status=none
+                      sync
+                      i=$((i+1))
+                      emit "$d" "UPDATE usage $(usage "$d")%"
+                      sleep 10
+                  done
+              }
+              pids=""
+              trap 'kill $pids 2>/dev/null; for d in /data1 /data2; do emit "$d" STOP; done; exit' TERM
+              for d in /data1 /data2; do
+                  writer "$d" &
+                  pids="$pids $!"
+              done
+              wait
+          volumeMounts:
+            - name: data1
+              mountPath: /data1
+            - name: data2
+              mountPath: /data2
+      volumes:
+        - name: data1
+          persistentVolumeClaim:
+            claimName: pvc-scale-1
+        - name: data2
+          persistentVolumeClaim:
+            claimName: pvc-scale-2
